@@ -1,23 +1,18 @@
 import * as queuer from './CastleCallQueue';
 import * as caches from './CastleCache';
-import * as constants from './Constants';
+import * as constants from './Promises';
+import { Chest } from './Chest';
 
-import { CastleUtils } from './CastleUtils';
 
 export class Room {
   private id: string;
-  private isVisited: boolean;
   private rooms: Room[];
+  private chests: Chest[];
 
-  constructor(url: string) {
-    this.id = CastleUtils.extractId(url);
-    this.isVisited = false;
+  constructor(id: string) {
+    this.id = id;
     this.rooms = [];
-    caches.roomCache.set(this.id, this);
-  }
-
-  public setIsVisited(isVisited: boolean): any {
-    this.isVisited = isVisited;
+    this.chests = [];
   }
 
   public calculateChests(): number {
@@ -29,10 +24,13 @@ export class Room {
     this.rooms.push(room);
   }
 
-  public fetchData() {
-    const RoomPromise = constants.roomPromise.bind(null, this.id);
-    if (!this.isVisited) {
-      queuer.addPromise(RoomPromise);
-    }
+  public addChest(chest: Chest): void {
+    this.chests.push(chest);
+  }
+
+  public async fetchData() {
+    caches.roomCache.set(this.id, this);
+    const RoomPromise = constants.roomDataPromise.bind(null, this.id);
+    queuer.addPromise(RoomPromise);
   }
 }

@@ -30,9 +30,12 @@
     "watch:test": "jest --watch"
   },
   "dependencies": {
+    "@types/p-queue": "^3.0.0",
     "@types/request": "^2.48.1",
     "@types/request-promise-native": "^1.0.15",
     "bluebird-queue": "0.0.8",
+    "delay": "^4.1.0",
+    "p-queue": "^3.0.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7"
   },
